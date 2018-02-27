@@ -97,6 +97,51 @@ class Produtos extends CI_Controller{
 
 ## <a name="parte2">Conectando no Banco de Dados</a>
 
+```sql
+CREATE TABLE usuario (id INTEGER AUTO_INCREMENT PRIMARY KEY , nome VARCHAR(255), email VARCHAR(255), senha VARCHAR(255));
+CREATE TABLE produtos(id INTEGER AUTO_INCREMENT PRIMARY KEY , nome VARCHAR(255), descricao TEXT, preco DECIMAL(10,2), usuario_id INTEGER);
+
+INSERT INTO usuario VALUES (1, 'josemalcher', 'email@josemalcher.net', 'e10adc3949ba59abbe56e057f20f883e');
+
+INSERT INTO produtos VALUES (1, 'Bola de futebol', 'bola de futebol assinada pelo zico', 300, 1);
+INSERT INTO produtos VALUES (2, 'HD EXTERNO', 'HD Externo de 500 GB', 400, 1);
+INSERT INTO produtos VALUES (3, 'Garrafa Terminca', 'Garrafa Termica Personalizada', 50, 1);
+```
+
+```php
+<?php
+if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+class produtos_model extends CI_Model{
+
+    public function buscaTodos(){
+        return $this->db->get("produtos")->result_array();
+    }
+
+
+}
+```
+
+```php
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Produtos extends CI_Controller{
+
+    public function index(){
+
+        $this->load->database();
+        $this->load->model('produtos_model');
+
+        $produtos = $this->produtos_model->buscaTodos();
+
+        $dados = array("produtos" => $produtos);
+
+        $this->load->view("produtos/index.php",$dados);
+    }
+
+}
+```
 
 [Voltar ao Índice](#indice)
 

@@ -5,12 +5,10 @@ class Produtos extends CI_Controller{
 
     public function index(){
 
-        $produtos = array();
+        $this->load->database();
+        $this->load->model('produtos_model');
 
-        $bola = array("nome" => "BOla de Futebol", "descricao"=> "Bola de futebol assinada pelo zico", "preco"=>300);
-        $hd = array(  "nome" => "HD Externo",      "descricao" => "HD Externo de 500 GB ",             "preco" => 500);
-
-        array_push($produtos, $bola, $hd);
+        $produtos = $this->produtos_model->buscaTodos();
 
         $dados = array("produtos" => $produtos);
 
