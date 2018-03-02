@@ -653,6 +653,134 @@ class LoginController extends CI_Controller
 
 ## <a name="parte9">Adicionando produtos</a>
 
+#### proj01\application\controllers\Produtos.php
+
+```php
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Produtos extends CI_Controller
+{
+
+    public function index()
+    {
+
+        //$this->output->enable_profiler(true);
+
+        $this->load->helper(array('url', 'currency', 'form'));
+
+        $this->load->model('produtos_model');
+        $produtos = $this->produtos_model->buscaTodos();
+        $dados = array("produtos" => $produtos);
+
+        $this->load->view("produtos/index.php", $dados);
+    }
+
+    public function formulario()
+    {
+        $this->load->view("produtos/formulario");
+    }
+
+    public function novo(){
+
+        $usuarioLogado = $this->session->userdata("usuario_logado"); 
+        $produto = array(
+            "nome"      => $this->input->post("nome"),
+            "preco"     => $this->input->post("preco"),
+            "descricao" => $this->input->post("descricao"),
+            "usuario_id"=> $usuarioLogado["id"]
+        );
+        $this->load->model("produtos_model");
+        $this->produtos_model->salva($produto);
+        $this->session->set_flashdata("success","Produto Salvo com sucesso");
+        redirect('/');
+
+    }
+
+}
+```
+
+#### \proj01\application\models\produtos_model.php
+
+```php
+<?php
+if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+class produtos_model extends CI_Model{
+
+    public function buscaTodos(){
+        return $this->db->get("produtos")->result_array();
+    }
+
+    public function salva($produto){
+        $this->db->insert("produtos", $produto);
+    }
+
+
+}
+```
+
+#### proj01\application\views\produtos\formulario.php
+
+```php
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Curso CI">
+    <meta name="author" content="José Malcher Jr.">
+
+    <title>Site Institucional - Cadastro de itens</title>
+
+    <link href="<?= base_url('assets/css/bootstrap.min.css') ?>" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+            <h1>Cadastro de Itens</h1>
+            <?php
+
+            echo form_open("produtos/novo");
+            echo form_label("Nome:", "nome");
+            echo form_input(array(
+                "name" => "nome",
+                "id" => "nome",
+                "class" => "form-control",
+                "maxlength" => "255"
+            ));
+
+            echo form_label("Preço", "preco");
+            echo form_input(array(
+                "name" => "preco",
+                "id" => "preco",
+                "class" => "form-control",
+                "maxlength" => "255",
+                "type" => "number"
+            ));
+
+            echo form_textarea(array(
+                "name" => "descricao",
+                "id" => "descricao",
+                "class" => "form-control"
+            ));
+            echo form_button(array(
+                "class" => "btn btn-primary",
+                "content" => "Cadastrar",
+                "type" => "submit"
+            ));
+            echo form_close();
+
+            ?>
+</div>
+<script src="<?= base_url('assets/js/jquery-3.3.1.min.js') ?>"></script>
+<script src="<?= base_url('assets/js/bootstrap.min.js') ?>"></script>
+<script src="<?= base_url('assets/js/ie10-viewport-bug-workaround.js') ?>"></script>
+</body>
+</html>
+    </body>
+</html>
+```
 
 [Voltar ao Índice](#indice)
 
