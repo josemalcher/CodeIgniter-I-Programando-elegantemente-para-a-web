@@ -5,9 +5,10 @@ class Produtos extends CI_Controller{
 
     public function index(){
 
-        $this->load->helper(array('url', 'currency_helper','form'));
+        $this->output->enable_profiler(true);
 
-        $this->load->database();
+        $this->load->helper(array('url', 'currency','form'));
+
         $this->load->model('produtos_model');
         $produtos = $this->produtos_model->buscaTodos();
         $dados = array("produtos" => $produtos);

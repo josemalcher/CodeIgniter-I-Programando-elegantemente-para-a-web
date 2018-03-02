@@ -309,6 +309,12 @@ class Usuarios_model extends CI_Model
 
 ## <a name="parte6">Profiling</a>
 
+#### Habilitar dentro dos controllers
+
+```php
+    $this->output->enable_profiler(true); 
+```
+
 
 [Voltar ao Índice](#indice)
 
