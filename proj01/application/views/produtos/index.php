@@ -21,7 +21,7 @@
             <?php foreach ($produtos as $produto) : ?>
                 <tr>
                     <td><?= $produto["nome"]; ?></td>
-                    <td><?= $produto["preco"]; ?></td>
+                    <td><?= numeroEmReais($produto["preco"]); ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

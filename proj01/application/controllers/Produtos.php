@@ -5,6 +5,8 @@ class Produtos extends CI_Controller{
 
     public function index(){
 
+        $this->load->helper(array('url', 'currency_helper'));
+
         $this->load->database();
         $this->load->model('produtos_model');
 

@@ -149,6 +149,28 @@ class Produtos extends CI_Controller{
 
 ## <a name="parte3">Helpers</a>
 
+#### \proj01\application\helpers\currency_helper.php
+
+```php
+<?php
+
+function numeroEmReais($numero){
+    return "R$ " . number_format($numero, 2, ",", ".");
+}
+```
+
+#### proj01\application\controllers\Produtos.php
+
+```php
+$this->load->helper(array('url', 'currency_helper'));
+```
+
+#### proj01\application\views\produtos\index.php
+```php 
+
+    <td><?= numeroEmReais($produto["preco"]); ?></td>
+
+```
 
 [Voltar ao Índice](#indice)
 
