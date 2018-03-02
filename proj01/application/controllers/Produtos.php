@@ -5,7 +5,7 @@ class Produtos extends CI_Controller{
 
     public function index(){
 
-        $this->output->enable_profiler(true);
+        //$this->output->enable_profiler(true);
 
         $this->load->helper(array('url', 'currency','form'));
 
