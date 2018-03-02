@@ -25,6 +25,31 @@
             <?php endforeach; ?>
         </table>
         <hr>
+        <?php if(! $this->session->userdata("usuario_logado")) : ?>
+        <h1>Login</h1>
+        <?php 
+            echo form_open("LoginController/autenticar");
+        echo form_label("Email:", "email");
+            echo form_input(array(
+                "name" => "email",
+                "id" => "email",
+                "class" => "form-control",
+                "maxlength" => "255"
+            ));
+            echo form_label("SENHA:", "senha");
+            echo form_password(array(
+                "name" => "senha",
+                "id" => "senha",
+                "class" => "form-control",
+                "maxlength" => "255"
+            ));
+            echo form_button(array(
+                "class" => "btn btn-primary",
+                "content" => "LOGIN",
+                "type" => "submit"
+            ));
+            echo form_close();
+        ?>
 
         <h1>Cadastro de Usuários</h1>
 
@@ -62,7 +87,7 @@
             echo form_close();
         ?>
 
-
+        <?php endif; ?>
     </div>
 
 

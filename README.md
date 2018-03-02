@@ -322,6 +322,172 @@ class Usuarios_model extends CI_Model
 
 ## <a name="parte7">Implementando o Login</a>
 
+```php
+$autoload['libraries'] = array('database','session');
+```
+
+#### proj01\application\views\produtos\index.php
+
+```php
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Curso CI">
+    <meta name="author" content="José Malcher Jr.">
+
+    <title>Site Institucional</title>
+
+    <link href="<?=base_url('assets/css/bootstrap.min.css')?>" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Produtos</h1>
+        <table class="table">
+            <?php foreach ($produtos as $produto) : ?>
+                <tr>
+                    <td><?= $produto["nome"]; ?></td>
+                    <td><?= numeroEmReais($produto["preco"]); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+        <hr>
+        <?php if(! $this->session->userdata("usuario_logado")) : ?>
+        <h1>Login</h1>
+        <?php 
+            echo form_open("LoginController/autenticar");
+        echo form_label("Email:", "email");
+            echo form_input(array(
+                "name" => "email",
+                "id" => "email",
+                "class" => "form-control",
+                "maxlength" => "255"
+            ));
+            echo form_label("SENHA:", "senha");
+            echo form_password(array(
+                "name" => "senha",
+                "id" => "senha",
+                "class" => "form-control",
+                "maxlength" => "255"
+            ));
+            echo form_button(array(
+                "class" => "btn btn-primary",
+                "content" => "LOGIN",
+                "type" => "submit"
+            ));
+            echo form_close();
+        ?>
+
+        <h1>Cadastro de Usuários</h1>
+
+        <?php 
+            echo form_open("UsuariosController/novo");
+
+                echo form_label("Nome:", "nome");
+                echo form_input(array(
+                    "name"  =>"nome",
+                    "id"    =>"nome",
+                    "class" =>"form-control",
+                    "maxlength"=>"255"
+                ));
+                echo form_label("Email:", "email");
+                echo form_input(array(
+                    "name" => "email",
+                    "id" => "email",
+                    "class" => "form-control",
+                    "maxlength" => "255"
+                ));
+                echo form_label("SENHA:", "senha");
+                echo form_password(array(
+                    "name" => "senha",
+                    "id" => "senha",
+                    "class" => "form-control",
+                    "maxlength" => "255"
+                ));
+                echo form_button(array(
+                    "class" => "btn btn-primary",
+                    "content" => "Cadastrar",
+                    "type"  => "submit"
+                ));
+
+
+            echo form_close();
+        ?>
+
+        <?php endif; ?>
+    </div>
+
+
+<script src="<?=base_url('assets/js/jquery-3.3.1.min.js')?>"></script>
+<script src="<?=base_url('assets/js/bootstrap.min.js')?>"></script>
+<script src="<?=base_url('assets/js/ie10-viewport-bug-workaround.js')?>"></script>
+</body>
+</html>
+```
+
+#### proj01\application\controllers\LoginController.php
+
+```php
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class LoginController extends CI_Controller
+{
+
+    public function autenticar()
+    {
+        $this->output->enable_profiler(true);
+        $this->load->model("usuarios_model");
+        $email = $this->input->post("email");
+        $senha = md5($this->input->post("senha"));
+        $usuario = $this->usuarios_model->buscaPorEmailSenha($email,$senha);
+
+        if($usuario){
+            //$this->session->set_userdata(array("usuario_logado" => $usuario));
+            $this->session->set_userdata("usuario_logado" , $usuario);
+            $dados = array("mensagem"=> "Login com sucesso");
+        }else{
+            $dados = array("mensagem" => "usuário ou senha incorretos!");
+        }
+
+        $this->load->view("login/autenticar", $dados);
+
+
+    }
+
+}
+```
+
+#### proj01\application\models\Usuarios_model.php
+
+```php
+<?php
+if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+class Usuarios_model extends CI_Model
+{
+
+    public function salvar($usuario)
+    {
+        $this->db->insert("usuario", $usuario);  
+    }
+
+    public function buscaPorEmailSenha($email, $senha)
+    {
+        $this->db->where("email", $email);
+        $this->db->where("senha", $senha);
+        $usuario = $this->db->get("usuario")->row_array(); //somente a primeira linha
+        return $usuario;
+    }
+
+
+}
+````
+
 
 [Voltar ao Índice](#indice)
 
